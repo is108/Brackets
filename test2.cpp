@@ -12,13 +12,12 @@ string SortBrackets(int i); // Сортировка скобок на левые
 string CheckBrackets(char brack); // Сопоставление скобок.
 bool CheckBrackets_v2(char brack, char open_brack, char close_brack);
 void Exit(); // Выход из программы если условие неверно.
-bool OpenBrackets(char brack); // Сравнение открытых скобок
+bool OpenBrackets(char brack); //
 bool CloseBrackets(char brack);
 
 
 int main()
 {
-    cout << "1\n";
     cout << "Введите последовательность скобок: ";
     cin >> brackets;
 
