@@ -6,14 +6,13 @@ using namespace std;
 
 string brackets;
 string open_brackets = "";
-bool isSuccess = true;
 
-string SortBrackets(int i); // Сортировка скобок на левые и правые. 
-string CheckBrackets(char brack); // Сопоставление скобок.
+bool validateBrackets(int i); // Сортировка скобок на левые и правые.
+bool compareWithOpen(char brack); // Сопоставление скобок.
 bool CheckBrackets_v2(char brack, char open_brack, char close_brack);
 void Exit(); // Выход из программы если условие неверно.
-bool OpenBrackets(char brack); //
-bool CloseBrackets(char brack);
+bool isOpenBracket(const char brack); //
+bool isCloseBracket(const char brack);
 
 
 int main()
@@ -24,73 +23,62 @@ int main()
     int counter_brackets = 0;
 
     for (int i = 0; i < brackets.length(); i++){ // Подсчет левых и правых скобок. Если количество одинаковое counter_brackets = 0.
-        if (OpenBrackets(brackets[i]))
+        if (isOpenBracket(brackets[i]))
             counter_brackets++;
-        if (CloseBrackets(brackets[i]))
+        else if (isCloseBracket(brackets[i]))
             counter_brackets--;
     }
-    if (counter_brackets == 0 && OpenBrackets(brackets[0])) // Если количество скобок равно и первая скобка
-        SortBrackets(brackets.length() - 1);                                                     // не закрывающая.
+    if (counter_brackets == 0 && isOpenBracket(brackets[0])) // Если количество скобок равно и первая скобка
+        validateBrackets(brackets.length() - 1);                                                     // не закрывающая.
     else Exit();
-    
-    
+
+
     if (open_brackets == "")
-        cout << "Скобки расставлены правильно.\n";
-    else cout << "Скобки расставлены неправильно.\n";
+        cout << "True Скобки расставлены правильно.\n";
+    else cout << "False Скобки расставлены неправильно.\n";
 
     return 0;
 }
 
-string SortBrackets(int i){
+bool validateBrackets(int i){
     if (i >= 0) {
-
-        SortBrackets (i - 1);
-
-        if (OpenBrackets(brackets[i]))
+        if (!validateBrackets(i - 1))
+            return false;
+        if (isOpenBracket(brackets[i]))
             open_brackets += brackets[i];
-            
-        if (CloseBrackets(brackets[i])) 
-            open_brackets = CheckBrackets(brackets[i]);
+        else if (isCloseBracket(brackets[i]))
+            return compareWithOpen(brackets[i]);
     }
-       return open_brackets;
-
+    return true;
 }
 
-string CheckBrackets(char brack){
-    if (CloseBrackets(brack)){
-    isSuccess = CheckBrackets_v2(brack, '(', ')');
-    if (!isSuccess)
-        isSuccess = CheckBrackets_v2 (brack, '[', ']');
-        if (!isSuccess)
-            isSuccess = CheckBrackets_v2 (brack, '{', '}');
-    }
-    
-    return open_brackets;
+char pairFor(char bracket){
+    if (bracket == ')')
+        return '(';
+    if (bracket == ']')
+        return '[';
+    if (bracket == '}')
+        return '{';
+    return '0';
 }
 
-bool CheckBrackets_v2 (char brack, char open_brack, char close_brack){
-    if (brack == close_brack){
-        if (open_brackets[open_brackets.length() - 1] == open_brack){
-            open_brackets.pop_back();
-            return true;
-        }
-        else return false;
+bool compareWithOpen(char closeBrack){
+    if (open_brackets.back() == pairFor(closeBrack)){
+        open_brackets.pop_back();
+        return true;
     }
-
+    return false;
 }
+
 void Exit(){
     cout << "Скобки расставлены неправильно.\n";
     exit(0);
 }
 
-bool OpenBrackets(char brack){
-    if (brack == '[' || brack == '(' || brack == '{')
-        return true;
-    else return false;
+bool isOpenBracket(const char brack){
+    return (brack == '[' || brack == '(' || brack == '{');
 }
 
-bool CloseBrackets(char brack){
-    if (brack == ']' || brack == ')' || brack == '}')
-        return true; 
-    else return false;
+bool isCloseBracket(const char brack){
+    return (brack == ']' || brack == ')' || brack == '}');
 }
